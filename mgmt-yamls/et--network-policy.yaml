@@ -1,0 +1,36 @@
+---
+apiVersion: lib.projectsveltos.io/v1beta1
+kind: EventTrigger
+metadata:
+  name: private-namespace-network-policy-trigger
+  namespace: projectsveltos
+spec:
+  sourceClusterSelector:
+    matchLabels:
+      managedBy: sveltos
+  eventSourceName: private-namespace-event-source
+  oneForEvent: true
+  policyRefs:
+  - name: lockdown-network-policy-cm
+    namespace: projectsveltos
+    kind: ConfigMap
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lockdown-network-policy-cm
+  namespace: projectsveltos
+  annotations:
+    projectsveltos.io/instantiate: ok
+data:
+  networkpolicy.yaml: |
+    apiVersion: networking.k8s.io/v1
+    kind: NetworkPolicy
+    metadata:
+      name: {{ .Resource.metadata.name }}-lockdown-network-policy
+      namespace: {{ .Resource.metadata.name }}
+    spec:
+      podSelector: {}
+      policyTypes:
+      - Ingress
+  

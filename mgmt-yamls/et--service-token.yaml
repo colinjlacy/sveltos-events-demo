@@ -1,0 +1,34 @@
+---
+apiVersion: lib.projectsveltos.io/v1beta1
+kind: EventTrigger
+metadata:
+  name: service-account-token-trigger
+  namespace: projectsveltos
+spec:
+  sourceClusterSelector:
+    matchLabels:
+      managedBy: sveltos
+  eventSourceName: service-account-event-source
+  oneForEvent: true
+  policyRefs:
+  - name: bot-sa-token-cm
+    namespace: projectsveltos
+    kind: ConfigMap
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bot-sa-token-cm
+  namespace: projectsveltos
+  annotations:
+    projectsveltos.io/instantiate: ok
+data:
+  networkpolicy.yaml: |
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: my-long-lived-secret
+      annotations:
+        kubernetes.io/service-account.name: {{ .Resource.metadata.name }}
+    type: kubernetes.io/service-account-token
+  

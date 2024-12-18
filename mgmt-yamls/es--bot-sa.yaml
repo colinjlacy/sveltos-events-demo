@@ -1,0 +1,16 @@
+---
+apiVersion: lib.projectsveltos.io/v1beta1
+kind: EventSource
+metadata:
+  name: service-account-event-source
+  namespace: projectsveltos
+spec:
+  collectResources: true
+  resourceSelectors:
+  - group: ""
+    version: "v1"
+    kind: "ServiceAccount"
+    labelFilters:
+    - key: userType
+      operation: Equal
+      value: bot

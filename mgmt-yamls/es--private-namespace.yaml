@@ -1,0 +1,16 @@
+---
+apiVersion: lib.projectsveltos.io/v1beta1
+kind: EventSource
+metadata:
+  name: private-namespace-event-source
+  namespace: projectsveltos
+spec:
+  collectResources: true
+  resourceSelectors:
+  - group: ""
+    version: "v1"
+    kind: "Namespace"
+    labelFilters:
+    - key: access
+      operation: Equal
+      value: private
