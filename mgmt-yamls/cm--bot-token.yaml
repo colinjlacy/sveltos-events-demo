@@ -1,0 +1,18 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bot-sa-token-cm
+  namespace: projectsveltos
+  annotations:
+    projectsveltos.io/instantiate: ok
+data:
+  networkpolicy.yaml: |
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: {{ .Resource.metadata.name }}-token
+      namespace: {{ .Resource.metadata.namespace }} 
+      annotations:
+        kubernetes.io/service-account.name: {{ .Resource.metadata.name }}
+    type: kubernetes.io/service-account-token

@@ -10,7 +10,19 @@ spec:
   - group: ""
     version: "v1"
     kind: "Namespace"
-    labelFilters:
-    - key: access
-      operation: Equal
-      value: private
+    evaluate: |
+      function evaluate()
+        hs = {}
+        hs.matching = false
+        hs.message = ""
+        if obj.metadata.labels ~= nil then
+          for key, value in pairs(obj.metadata.labels) do
+            if key == "access" then
+              if value == "private" then
+                hs.matching = true
+              end
+            end
+          end
+        end
+        return hs
+      end
