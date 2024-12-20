@@ -7,7 +7,7 @@ metadata:
   annotations:
     projectsveltos.io/instantiate: ok
 data:
-  networkpolicy.yaml: |
+  token-secret.yaml: |
     apiVersion: v1
     kind: Secret
     metadata:
